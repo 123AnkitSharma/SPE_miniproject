@@ -46,7 +46,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ScientificCalculator</mainClass>  <!-- Change this to your actual main class -->
+                            <mainClass>Scientific_Calculator</mainClass>  <!-- Change this to your actual main class -->
                         </manifest>
                     </archive>
                 </configuration>

@@ -38,7 +38,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE_NAME}", '.')
+                    docker.build("itsankit123/${DOCKER_IMAGE_NAME}", '.')
                 }
             }
         }
@@ -46,9 +46,8 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('', 'DockerHubCred') {
-                        sh 'docker tag scientific_calculator itsankit123/scientific_calculator:latest'
-                        sh 'docker push itsankit123/scientific_calculator'
+                    docker.withRegistry('https://index.docker.io/v1/', 'DockerHubCred') {
+                        sh 'docker push itsankit123/scientific_calculator:latest'
                     }
                 }
             }

@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    triggers { 
+        githubPush() 
+    }
+    
+    environment {
+        DOCKER_IMAGE_NAME = 'scientific_calculator'
+        GITHUB_REPO_URL = 'https://github.com/123AnkitSharma/SPE_miniproject.git'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    // Clone the GitHub repository
+                    git branch: 'main', url: "${GITHUB_REPO_URL}"
+                }
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                script {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE_NAME}", '.')
+                }
+            }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('', 'DockerHubCred') {
+                        sh 'docker tag scientific_calculator itsankit123/scientific_calculator:latest'
+                        sh 'docker push itsankit123/scientific_calculator'
+                    }
+                }
+            }
+        }
+
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    ansiblePlaybook(
+                        playbook: 'deploy.yml',
+                        inventory: 'inventory'
+                    )
+                }
+            }
+        }
+    }
+}

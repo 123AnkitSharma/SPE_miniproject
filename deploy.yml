@@ -1,0 +1,30 @@
+---
+    - name: Pull Docker Image from Docker Hub and Run Container
+      hosts: localhost
+      remote_user: ankit
+      become: false
+      tasks:
+        - name: Pull Docker Image
+          community.docker.docker_image:
+            name: "itsankit123/scientific_calculator"
+            source: pull
+          register: docker_pull_result
+    
+        - name: Display Docker Pull Result
+          debug:
+            var: docker_pull_result
+    
+        - name: Ensure Docker Service is Running
+          service:
+            name: docker
+            state: started
+    
+        - name: Stop and Remove Existing Container (if running)
+          shell: |
+            docker stop calculator || true
+            docker rm calculator || true
+          ignore_errors: yes
+    
+        - name: Run Container
+          shell: docker run -it -d --name calculator itsankit123/scientific_calculator
+    

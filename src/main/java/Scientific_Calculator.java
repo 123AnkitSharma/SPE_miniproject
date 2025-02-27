@@ -9,7 +9,7 @@ public class Scientific_Calculator {
 
     // Method for Factorial
     public static long factorial(int x) {
-        if (x < 0) return -1;  // Factorial is not defined for negative numbers
+        if (x < 0) throw new IllegalArgumentException("Factorial is undefined for negative numbers.");
         long fact = 1;
         for (int i = 1; i <= x; i++) {
             fact *= i;

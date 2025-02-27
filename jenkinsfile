@@ -13,7 +13,6 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 script {
-                    // Clone the GitHub repository
                     git branch: 'main', url: "${GITHUB_REPO_URL}"
                 }
             }
@@ -38,7 +37,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("itsankit123/${DOCKER_IMAGE_NAME}", '.')
+                    def image = docker.build("itsankit123/${DOCKER_IMAGE_NAME}:latest", '.')
+                    sh "docker image prune -f" // Clean up dangling images
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'DockerHubCred') {
-                        sh 'docker push itsankit123/scientific_calculator:latest'
+                        sh "docker push itsankit123/${DOCKER_IMAGE_NAME}:latest"
                     }
                 }
             }

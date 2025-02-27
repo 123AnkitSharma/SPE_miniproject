@@ -15,7 +15,7 @@ public class ScientificCalculatorTest {
 
     @Test
     public void testNaturalLog() {
-        assertEquals(2.3025, Scientific_Calculator.naturalLog(10), 0.0001);
+        assertEquals(2.302585, Scientific_Calculator.naturalLog(10), 0.0001);
     }
 
     @Test
@@ -26,5 +26,10 @@ public class ScientificCalculatorTest {
     @Test(expected = IllegalArgumentException.class)
     public void testNaturalLogNegative() {
         Scientific_Calculator.naturalLog(-5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFactorialNegative() {
+        Scientific_Calculator.factorial(-5);
     }
 }
